@@ -1,0 +1,175 @@
+/*
+--IN THE NAME OF GOD--
+Style by: amirhasan
+Email: amirh1749@gmail.com
+
+*/
+@font-face {
+font-family: 'BKoodakBold';
+src: url('fonts/koodak/BKoodakBold.eot?#') format('eot'),
+url('fonts/koodak/BKoodakBold.ttf') format('truetype'),
+url('fonts/koodak/BKoodakBold.woff') format('woff');
+}
+@font-face {
+font-family: 'BElham';
+src: url('fonts/BElham.eot?#') format('eot'),
+url('fonts/elham/BElham.ttf') format('truetype'),
+url('fonts/elham/BElham.woff') format('woff');
+}
+@font-face {
+font-family: 'BTitrTGEBold';
+src: url('fonts/titr/BTitrTGEBold.eot?#') format('eot'),
+url('fonts/titr/BTitrTGEBold.ttf') format('truetype'),
+url('fonts/titr/BTitrTGEBold.woff') format('woff');
+}
+body
+{
+	text-align:right;
+	direction:rtl;
+	font-size:small;
+	margin:0;
+	font-family:BKoodakBold,'BKoodakBold',tahoma;
+}
+input[type=text],input[type=password]
+{
+	 width: 100%;
+    padding: 12px 20px;
+    margin: 8px 0;
+    box-sizing: border-box;
+    border: 3px solid #ccc;
+    -webkit-transition: 0.5s;
+    transition: 0.5s;
+    outline: none;
+}
+input[type=text]:hover,input[type=password]:hover
+{
+    border: 3px solid #555;
+	}
+input[type=button], input[type=submit], input[type=reset] {
+	width:100%;
+    background-color: #4CAF50;
+    border: none;
+    color: white;
+    padding: 16px 32px;
+    text-decoration: none;
+    margin: 4px 2px;
+    cursor: pointer;
+}
+.button
+{
+	width:100%;
+    background-color: #4CAF50;
+    border: none;
+    color: white;
+    padding: 16px 32px;
+    text-decoration: none;
+    margin: 4px 2px;
+    cursor: pointer;
+}
+#box-setting
+{
+	padding-right:2%;
+	padding-left:2%;
+	padding-top:2%;
+padding:3%;	
+}
+#right
+{
+	float:right;
+	width:30%;
+}
+#left
+{
+	float:left;
+	width:68%;
+	padding-right:2%;
+}
+.right-box
+{
+	padding-right:2%;
+	padding-left:2%;
+	padding-top:2%;
+	padding-bottom:2%;
+	height:auto;
+  box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19);
+  text-align:right;
+	font-family:BElham,'BElham',tahoma;
+	color:silver;
+}
+.right-box:hover
+{
+	  box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 1.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19);
+
+}
+.status
+{
+	font-size:large;
+}
+.title
+{
+	font-size:x-large;
+	color:silver;
+}
+.title-right
+{
+	font-size:x-large;
+	color:silver;
+	text-align:center;
+}
+.title-post
+{
+	width:100%;
+	text-align:right;
+	font-size:x-large;
+	font-weight:bold;
+	font-family:BTitrTGEBold,'BTitrTGEBold',tahoma;
+}
+.timedate
+{
+	color:silver;
+	padding-top:1%;
+}
+.hrclass
+{
+	margin-top:3%;
+}
+.time
+{
+	padding-right:2%;
+}
+.text-post
+{
+	padding-top:1%;
+}
+.box-skill
+{
+	width:98%;
+	padding:1%;
+	background-color:silver;
+	
+}
+.both
+{
+	clear:both;
+}
+.size-skill
+{
+	background-color:green;
+	text-align:center;
+	color:white;
+	float:left;
+}
+.avatar
+{
+	width:100%;
+}
+.left-box
+{
+	padding-right:2%;
+	padding-left:2%;
+	padding-top:2%;
+	padding-bottom:2%;
+	height:auto;
+  box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19);
+}
+
