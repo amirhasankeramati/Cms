@@ -21,10 +21,10 @@ if(isset($_POST['edit']))
 	{
 		
 	
-	$file = fopen( "$namePage", "w+" ) or exit ( "Unable to open file!" ) ;
+	$filew = fopen( "$namePage", "w+" ) or exit ( "Unable to open file!" ) ;
 	$edit=$_POST['text'];
-   fwrite($file,$edit);
-    fclose( $file ) ;
+   fwrite($filew,$edit);
+    fclose( $filew ) ;
 	}
 	else
 	{
