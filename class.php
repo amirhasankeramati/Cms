@@ -1,8 +1,4 @@
 <?php
-/* 
-name: Amirhasan
-Email: Amirh1749@gmail.com 
-*/
 class Login {
 private $username="admin";	
 private $password="1212";
@@ -44,20 +40,20 @@ private $result;
 		$count=$sql->fetchColumn();
 		if($this->result == "0" AND $count == "0")
 		{
-			echo "<h2 style='color:red'>اطلاعات وارد شده صحیح نیست.</h2>";
+			header("location: nimda.php?action=error");
 			$ins="INSERT INTO log_login (ip,result,ban)VALUES('$ip','0','1')";
 			$this->conn->exec($ins);
 		}
 		elseif($count > "2")
 		{
-			echo "<h2 style='color:red'>اطلاعات وارد شده صحیح نیست.</h2>";
+			header("location: nimda.php?action=error");
 		}
 		else
 		{
 			$ins="INSERT INTO log_login (ip,result,ban)VALUES('$ip','1','0')";
 			$this->conn->exec($ins);
 			$_SESSION['username']=$this->name;
-			echo "ok !!!";
+			// echo "ok !!!";
 			header ("location: panel.php");
 		}
 		
@@ -67,6 +63,7 @@ private $result;
 	public function logout()
 	{
 		session_unset();
+		header ("location: index.php");
 	}
 	public function User()
 	{
@@ -96,9 +93,51 @@ private $result;
 		{
 			if($this->namePage == $filterPage[$x])
 		{
-			header ("location: panel.php");
+			header ("location: panel.php?action=error");
+		}
+		else
+		{
+				   $filer = fopen($this->namePage,"r") or header ("location: panel.php?action=error") ;
+				   $this->filer = $filer;
 		}
 		
+		}
+	}
+	public function editpage($page)
+	{
+		if($_POST['security'] == "44651812")
+	{
+	$filew = fopen( "$this->namePage", "w+" ) or exit ( "Unable to open file!" ) ;
+	$edit=$_POST['text'];
+   fwrite($filew,$edit);
+    fclose( $filew ) ;
+		header ("location: panel.php?action=success");
+	}
+	else
+	{
+		header ("location: panel.php?action=error");
+	}
+	}
+	public function actions($action)
+	{
+		$this->action=$action;
+		if($this->action == 'error')
+		{
+			echo'<script>
+		document.getElementById("errors").style.display="block";
+	</script>';
+		}
+		elseif($this->action == 'success')
+		{
+			echo'<script>
+		document.getElementById("success").style.display="block";
+	</script>';
+		}
+		else
+		{
+			echo'<script>
+		document.getElementById("info").style.display="block";
+	</script>';
 		}
 	}
 	
