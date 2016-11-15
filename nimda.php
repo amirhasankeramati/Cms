@@ -40,8 +40,17 @@ if(isset($_POST['username']))
 }
 ?>
 
-
 <div class="title"><i class="fa fa-key" style="font-size:38px;color:green"></i> ورود به پنل</div>
+<div class="error-class danger" id="errors"></div>
+<div class="error-class success" id="success"></div>
+<div class="error-class info" id="info"></div>
+<?php
+if(isset($_GET['action']))
+{
+	$action=$_GET['action'];
+$connect->actions($action);
+}
+?>
 <form action="" method="post">
 <input type="text" name="username" id="username" placeholder="نام کاربری">
 <input type="password" name="pass" id="pass" placeholder="پسورد">
