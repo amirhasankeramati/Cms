@@ -1,9 +1,3 @@
-/*
---IN THE NAME OF GOD--
-Style by: amirhasan
-Email: amirh1749@gmail.com
-
-*/
 @font-face {
 font-family: 'BKoodakBold';
 src: url('fonts/koodak/BKoodakBold.eot?#') format('eot'),
@@ -172,4 +166,41 @@ padding:3%;
 	height:auto;
   box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19);
 }
+.error-class
+{
+	margin-bottom: 15px;
+    padding: 4px 12px;
+	display:none;
+}
+.danger:before
+{
+	content:'خطایی رخ داده است.';
+}
+.danger
+{
+	background-color: #ffdddd;
+    border-right: 6px solid #f44336;
+}
+.success:before
+{
+	content:'با موفقیت انجام شد.';
+}
+.success {
+    background-color: #ddffdd;
+    border-right: 6px solid #4CAF50;
+}
+.info:before
+{
+	content:'موردی یافت نشد.';
+}
+.info {
+    background-color: #e7f3fe;
+    border-right: 6px solid #2196F3;
+}
+
+
+
+
+
+
 
