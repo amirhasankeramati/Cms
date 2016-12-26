@@ -1,0 +1,22 @@
+<IfModule mod_expires.c>
+ ExpiresActive On
+ ExpiresByType     image/gif                   "access plus 1 month"
+ ExpiresByType     image/png                   "access plus 1 month"
+ ExpiresByType     text/css                    "access plus 1 week"
+ ExpiresByType     text/javascript             "access plus 1 week"
+ ExpiresByType     application/javascript      "access plus 1 week"
+ ExpiresByType     application/x-javascript    "access plus 1 week"
+</IfModule>
+<files â€œ.htaccessâ€‌>
+order allow,deny
+deny from all
+</files>
+  RewriteEngine On
+   RewriteRule ^me/(\d+)*$ ./index.php
+  RewriteRule ^admin/panel/(\d+)*$ ./panel.php
+  RewriteRule ^admin/login/(\d+)*$ ./nimda.php
+  RewriteCond %{DOCUMENT_ROOT}%{REQUEST_URI} !-f
+  RewriteRule \.(gif|jpe?g|png|bmp) /images/not-found.png [NC,L]
+
+  ErrorDocument 404 /me/404.html
+
