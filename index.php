@@ -1,3 +1,8 @@
+<!-- 
+
+Design by Amirh1749@gmail.com
+
+-->
 <?php
 include_once("contoroller/cont.php");
 $connect=new contoroller();
