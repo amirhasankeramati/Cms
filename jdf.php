@@ -2,6 +2,7 @@
 
 /** Software Hijri_Shamsi , Solar(Jalali) Date and Time
 Copyright(C)2011, Reza Gholampanahi , http://jdf.scr.ir
+Design by Amirh1749@gmail.com
 version 2.55 :: 1391/08/24 = 1433/12/18 = 2012/11/15 */
 
 /*	F	*/
