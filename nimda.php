@@ -1,14 +1,15 @@
 <?php
-include("class.php");
-$connect=new Login();
-$connect->nimda();
+include_once("contoroller/cont.php");
+$connect=new contoroller();
+($connect->checkAddress() == true) ?  : header("location:  " . NOT_FOUND . "");
+$connect->connectClass->nimda();
 ?>
 <!Doctype html>
 <html>
 <head>
-<title>وب سایت شخصی</title>
+<title><?php echo TITLE; ?></title>
 <meta charset="UTF-8">
-<link rel="stylesheet" href="style.css">
+<link rel="stylesheet" href="<?php echo STYLE; ?>">
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.6.3/css/font-awesome.min.css">
 </head>
 <body>
@@ -35,12 +36,12 @@ if(isset($_POST['username']))
 {
 	$user=$_POST['username'];
 	$pass=$_POST['pass'];
-	$connect->setLogin($user,$pass);
-	$connect->getLogin();
+	$connect->connectClass->setLogin($user,$pass);
+	$connect->connectClass->getLogin();
 }
 ?>
 
-<div class="title"><i class="fa fa-key" style="font-size:38px;color:green"></i> ورود به پنل</div>
+<div class="title"><i class="fa fa-key" style="font-size:38px;color:green"></i><?php echo TITLELOGIN; ?></div>
 <div class="error-class danger" id="errors"></div>
 <div class="error-class success" id="success"></div>
 <div class="error-class info" id="info"></div>
@@ -48,7 +49,7 @@ if(isset($_POST['username']))
 if(isset($_GET['action']))
 {
 	$action=$_GET['action'];
-$connect->actions($action);
+$connect->connectClass->actions($action);
 }
 ?>
 <form action="" method="post">
