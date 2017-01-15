@@ -7,6 +7,8 @@ if (__FILE__ == $_SERVER['SCRIPT_FILENAME']) exit('No direct access allowed.');
  * @property mixed namePager
  * @property resource filer
  * @property mixed action
+ * @property mixed setRand
+
  */
 class Login {
     protected $username="admin";
@@ -22,51 +24,78 @@ class Login {
 		
 		include_once("config.php");
 		include_once("jdf.php");
-		include_once("database.php");
-		$this->db = new database();
+		include_once("controller/param.php");
+		$this->param = new param();
 		session_start();
 		
 		
 	}
+	
+	public function repatch()
+	{
+     if(!isset($_SESSION['recTime'])){
+		 
+		 $_SESSION['newTime']    = '';
+		 $_SESSION['recTime']    = '';
+		 $_SESSION['newRepatch'] = 'code...';
+	 }
+		$getTime = time();	
+			if($_SESSION['recTime'] < $getTime)
+		{
+			$setRnd = rand(100,1000);
+			$_SESSION['newTime'] = time();
+		    $_SESSION['recTime'] = $_SESSION['newTime'] + 10;
+			$_SESSION['newRepatch'] = $setRnd;
+			$this->getRnd= $_SESSION['newRepatch'];
+			return  $this->getRnd;
+		}
+		else
+		{
+			$this->getRnd= $_SESSION['newRepatch'];
+			return  $this->getRnd;
+		}
+	}
+	
 	public function setLogin($name,$pass){
-		$this->name=$name;
-		$this->pass=$pass;
+		$this->name=htmlspecialchars($name);
+		$this->pass=htmlspecialchars($pass);
 		$query= /** @lang sql */ 'SELECT * FROM users WHERE `name`=:name AND `pass`=:pass';
-		$sql=$this->db->conn->prepare($query);
-		$sql->bindParam(":name",$name);
-		$sql->bindParam(":pass",$pass);
+		$sql=$this->param->db->conn->prepare($query);
+		$sql->bindParam(":name",$this->name);
+		$sql->bindParam(":pass",$this->pass);
 		$sql->execute();
 		$result=$sql->fetchColumn();
 		$this->result=$result;
+		
 	}
 	public function getLogin(){
 		$ip=$_SERVER['REMOTE_ADDR'];
-		$rslt="0";
+		$rslt=0;
 		$query= /** @lang sql */ "SELECT * FROM log_login WHERE `ip`=:ip AND `result`=:result";
-		$sql=$this->db->conn->prepare($query);
+		$sql=$this->param->db->conn->prepare($query);
 		$sql->bindParam(":ip",$ip);
 		$sql->bindParam(":result",$rslt);
 		$sql->execute();
 		/** @var number $count */
 		$count=$sql->rowCount();
-		if($this->result == "0")
+		if($this->result == 0)
 		{
 			header("location: ?action=error");
 			$ins= /** @lang sql */ "INSERT INTO log_login (ip,result,ban)VALUES('$ip','0','1')";
-			$this->db->conn->exec($ins);
+			$this->param->db->conn->exec($ins);
 		}
-		elseif($count > '5')
+		elseif($count > 5)
 		{
 			header("location: ?action=error");
 		}
 		else
 		{
 			$ins= /** @lang sql */ "INSERT INTO log_login (ip,result,ban)VALUES('$ip','1','0')";
-			$this->db->conn->exec($ins);
+			$this->param->db->conn->exec($ins);
 			$_SESSION['username'] = $this->name;
 			$_SESSION['login_in'] = true;
 			// echo "ok !!!";
-			header ("location: /me/?action=admin");
+			header ("location: " . ADDRESS . "/?action=admin");
 		}
 		
 		
@@ -78,21 +107,21 @@ class Login {
 		{
 		session_unset("username");
 		$_SESSION['login_in'] = false;
-		header ("location: /me");
+		header ("location: " . ADDRESS);
 		}
 	}
 	public function User()
 	{
 				if($_SESSION['login_in'] == false)
 		{
-			header ("location: /me");
+			header ("location: " . ADDRESS);
 		}
 	}
 	public function nimda()
 	{
 		if(isset($_SESSION['username']))
 		{
-			header ("location: /me/admin/panel/");
+			header ("location: " . ADDRESS . "/admin/panel/");
 		}
 	}
 	public function Page($namePage) {
@@ -202,7 +231,7 @@ class Amirhasan extends Login
 	public function manager($resultManager)
 	{	
 		$manager= /** @lang sql */ "SELECT * FROM manager";
-		$managersql=$this->db->conn->prepare($manager);
+		$managersql=$this->param->db->conn->prepare($manager);
 		$managersql->execute();	
 		$checkmanager = $managersql->fetch(PDO::FETCH_ASSOC);
 		$this->checkmanager=$checkmanager;
@@ -213,11 +242,11 @@ class Amirhasan extends Login
 			
 		if($checkmanager['posts'] == '0')
 		{
-			echo $this->editadmin('نمایش پست ها غیرفعال شود.','/me/admin/panel/?manager=disabledPosts');
+			echo $this->editadmin('نمایش پست ها غیرفعال شود.', ADDRESS . '/admin/panel/?manager=disabledPosts');
 		}
 		elseif($checkmanager['posts'] == '1')
 		{
-			echo $this->editadmin('نمایش پست ها فعال شود.','/me/admin/panel/?manager=enabledPosts');
+			echo $this->editadmin('نمایش پست ها فعال شود.', ADDRESS . '/admin/panel/?manager=enabledPosts');
 
 		}
 		else
@@ -234,7 +263,7 @@ class Amirhasan extends Login
 		{
 			$disabledPosts=1;
 			$queryposts= /** @lang sql */ "UPDATE manager SET posts=:posts";
-			$sqlposts=$this->db->conn->prepare($queryposts);
+			$sqlposts=$this->param->db->conn->prepare($queryposts);
 			$sqlposts->bindParam(":posts",$disabledPosts);
 			$sqlposts->execute();
 			header("location: /me");
@@ -243,24 +272,23 @@ class Amirhasan extends Login
 		{
 			$enabledPosts=0;
 			$queryposts= /** @lang sql */ "UPDATE manager SET posts=:posts";
-			$sqlposts=$this->db->conn->prepare($queryposts);
+			$sqlposts=$this->param->db->conn->prepare($queryposts);
 			$sqlposts->bindParam(":posts",$enabledPosts);
 			$sqlposts->execute();
-		header("location: /me");
+		header("location: " . ADDRESS);
 
 		}
 		else
 		{
-		header("location: /me/admin/panel/?action=error");
+		header("location: " . ADDRESS . "/admin/panel/?action=error");
 
 		}
 		}
 	}
 	}
-	
+		
 	public function showpost($idPost)
 	{
-		
 		$this->manager('');
 		if($this->checkmanager['posts'] == '1')
 		{
@@ -268,132 +296,56 @@ class Amirhasan extends Login
 		}
 		elseif($this->checkmanager['posts'] == '0')
 		{
-			
 			if($idPost == '')
 			{
-
-		foreach ($this->db->query("SELECT * FROM " . TABLEPOST . " ORDER BY id DESC") as $checkpost){
-
-			echo /** @lang text */
-"
-<div class='title-post'> " .  $checkpost['title']  . " </div>
-<div class='timedate'>
-<img src='http://localhost:60/me/images/me.jpg' width='100px' height='100px' style='border-radius:50px'><br>
-<i class='fa fa-calendar' style='font-size:18px;color:green'></i><i class='time'>" . jdate('j F Y', $checkpost['time']) . "</i><br>
-<i class='fa fa-clock-o' style='color:orange;font-size:18px'> </i><i class='time'>" . $checkpost['clock'] . "</i><br>
-<i class='fa fa-pencil' style='color:black;font-size:18px'> </i><i class='time'>" . $checkpost['auther'] . "</i><br>
-<i class='fa fa-comment' style='color:blue;font-size:18px'> </i><i class='time'>نظرات</i><br>
-<i class='fa fa-link' style='color:red;font-size:18px'> </i><i class='time'><a href='/me/?post=" . $checkpost['id'] ."' style='color:silver'>لینک</a></i></div>
-<div class='text-post'>
-" . substr(nl2br($checkpost['post']),0,1000) . "
-</div>
-<div class='both'></div>
-<br>";
-
-			}
+			$this->param->paramShowPost();
 			}
 			else
 			{
-		foreach ($this->db->query("SELECT * FROM " . TABLEPOST . " WHERE id = '" . $idPost ."'") as $checkpostmore){			
-			if($this->checkadmin() == true)
-			{
-				echo /** @lang text */
-"
-<div class='title-post'> " .  $checkpostmore['title']  . " </div>
-<div class='timedate'>
-<i class='fa fa-calendar' style='font-size:18px;color:green'></i><i class='time'>" . jdate('j F Y', $checkpostmore['time']) . "</i><br>
-<i class='fa fa-clock-o' style='color:orange;font-size:18px'> </i><i class='time'>" . $checkpostmore['clock'] . "</i><br>
-<i class='fa fa-pencil' style='color:black;font-size:18px'> </i><i class='time'>" . $checkpostmore['auther'] . "</i><br>
-<i class='fa fa-comment' style='color:blue;font-size:18px'> </i><i class='time'>نظرات</i><br>
-<i class='fa fa-remove' style='color:red;font-size:18px'> </i><i class='time'><a href='/me/admin/panel/?postManager=delete&postId=" . $checkpostmore['id'] . "'>حذف</a></i><br>
-<i class='fa fa-edit' style='color:red;font-size:18px'> </i><i class='time'><a href='/me/admin/panel/?postManager=edit&postId=" . $checkpostmore['id'] . "'>ویرایش</a></i>
-</div>
-<div class='text-post'>
-" . substr(nl2br($checkpostmore['post']),0,4000) . "<br>" . substr(nl2br($checkpostmore['more']),0,4000) . "
-</div>
-<div class='both'></div>
-<br>";
-			}
-			else
-			{
-			echo /** @lang text */
-"
-<div class='title-post'> " .  $checkpostmore['title']  . " </div>
-<div class='timedate'>
-<i class='fa fa-calendar' style='font-size:18px;color:green'></i><i class='time'>" . jdate('j F Y', $checkpostmore['time']) . "</i><br>
-<i class='fa fa-clock-o' style='color:orange;font-size:18px'> </i><i class='time'>" . $checkpostmore['clock'] . "</i><br>
-<i class='fa fa-pencil' style='color:black;font-size:18px'> </i><i class='time'>" . $checkpostmore['auther'] . "</i><br>
-<i class='fa fa-comment' style='color:blue;font-size:18px'> </i><i class='time'>نظرات</i><br>
-</div>
-<div class='text-post'>
-" . substr(nl2br($checkpostmore['post']),0,4000) . "<br>" . substr(nl2br($checkpostmore['more']),0,4000) . "
-</div>
-<div class='both'></div>
-<br>";
-			}
-		
-		
+				
+				if($this->checkadmin() == true)
+				{
+					$this->param->paramShowMorePost($idPost,1);
+				}
+				else
+				{
+					$this->param->paramShowMorePost($idPost,0);
+				}
+	      	}
 		}
-		
-		
-			}
-			
-		
-		
-		}
-		else
-		{
-			echo 'ErRoR...';
-		}
-			
-			
-	
 	}
 	
 	public function editPost($idPost)
-	{
-		foreach ($this->db->query("SELECT * FROM " . TABLEPOST . " WHERE id = '" . $idPost ."'") as $checkpost){
-				
-
-echo "
-	<form action='' method='post'>
-		<input type='text' id='idPost' name='idPost' style='display:none' value='" . $checkpost['id']  ."'>
-		<font color='silver'>- عنوان مطلب </font>
-		<input type='text' id='titlePost' name='titlePost' value='" . $checkpost['title']  ."'>
-		<font color='silver'>- پیش مطلب</font>
-		<textarea name='contentPost' id='contentPost'>" . $checkpost['post']  ."</textarea>
-		<font color='silver'>- ادامه مطلب</font>
-		<textarea name='morePost' id='morePost'>" . $checkpost['more']  ."</textarea>
-		<input type='submit' value='ویرایش شود.' name='editPost' id='editPost'>
-";
-
-				
-				}
+	{	
+$this->param->formEditPost($idPost);		
 	}
 	
-	public function upPost($titlePost,$contentPost,$morePost,$idpost)
+	public function upPost($titlePost,$contentPost,$picturePost,$morePost,$idpost)
 	{
 		$values = array(
-		'title' => $titlePost,
-		'post'  => $contentPost,
-		'more'  => $morePost
+		'title'   => $titlePost,
+		'post'    => $contentPost,
+		'picture' => $picturePost,
+		'more'    => $morePost
 		);
 		$value = array(
 		'id'   => $idpost
 		);
-		$this->db->where($value);
-		$this->db->update(TABLEPOST,$values);
+		$this->param->db->where($value);
+		$this->param->db->update(TABLEPOST,$values);
 	}
 	
-	public function sendPost($title,$content,$more,$time)
+	public function sendPost($picturePost,$title,$content,$more)
 	{
 		$values =array(
+		'picture' => $picturePost,
 		'title' => $title,
 		'post'  => $content,
 		'more'  => $more,
-		'time'  => $time
+		'clock' => time(),
+		'time'  => time()
 		);
-		$this->db->insert(TABLEPOST,$values);
+		$this->param->db->insert(TABLEPOST,$values);
 		
 	}	
 	public function editadmin($name,$link)
@@ -409,10 +361,41 @@ echo "
 		$where = array(
 			'id' => $idpost
 		);
-		$this->db->where($where);
-		$this->db->delete(TABLEPOST);
+		$this->param->db->where($where);
+		$this->param->db->delete(TABLEPOST);
 	
 	}	
+	public function getAction()
+	{
+		if(isset($_GET['action']))
+             {
+              $action=$_GET['action'];
+              return $this->actions($action);
+             }
+	}
+	public function getShowPost()
+	{
+		if(isset($_GET['post']))
+          {
+	     $idpost=$_GET['post'];
+         return $this->showpost($idpost);
+          }
+        else
+          {
+        return $this->showpost('');
+          }
+	}
+	
+	public function change($address)
+	{
+		$values = array (
+		'post_profile' => $address
+		);
+		$this->param->db->update('manager',$values);
+	}
+	
+	
+	
 }
 
 ?>
