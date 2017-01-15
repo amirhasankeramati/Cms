@@ -3,7 +3,7 @@ if($_SERVER['REQUEST_URI'] == '/me/controller/cont.php'){header("location: 404.h
 if (__FILE__ == $_SERVER['SCRIPT_FILENAME']) exit('No direct access allowed.');
 // contoroll address
 
-class contoroller
+class controller
 {
 	protected $address;
 	protected $arrayAddress;
