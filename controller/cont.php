@@ -1,5 +1,5 @@
 <?php
-if($_SERVER['REQUEST_URI'] == '/me/contoroller/cont.php'){header("location: 404.html");}
+if($_SERVER['REQUEST_URI'] == '/me/controller/cont.php'){header("location: 404.html");}
 if (__FILE__ == $_SERVER['SCRIPT_FILENAME']) exit('No direct access allowed.');
 // contoroll address
 
