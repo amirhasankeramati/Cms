@@ -1,12 +1,6 @@
-<!--
-
-design by amirh1749@gmail.com
-
--->
-
 <?php
-include_once("contoroller/cont.php");
-$connect=new contoroller();
+include_once("controller/cont.php");
+$connect=new controller();
 ($connect->checkAddress() == true) ?  : header("location:  " . NOT_FOUND . "");
 $connect->connectClass->User();
 if($connect->connectClass->checkadmin() == true)
@@ -17,7 +11,12 @@ if($connect->connectClass->checkadmin() == true)
 		$titlePost = $_POST['titlePost'];
 		$contentPost  = $_POST['contentPost'];
 		$morePost = $_POST['morePost'];
-		$connect->connectClass->upPost($titlePost,$contentPost,$morePost,$idpost);
+		$picturePost = $_POST['picturePost'];
+		if($picturePost == '')
+	{
+		$picturePost = 'images/1.png';
+	}
+		$connect->connectClass->upPost($titlePost,$contentPost,$picturePost,$morePost,$idpost);
 	}
 	if(isset($_GET['namepage']))
 {
@@ -36,13 +35,22 @@ if(isset($_GET['manager']))
 {
 	$connect->connectClass->manager();
 }
+if(isset($_GET['change']))
+{
+	$address = $_GET['change'];
+	$connect->connectClass->change($address);
+}
 if(isset($_POST['sendPost']))
 {
 	$title=$_POST['title'];
 	$content=$_POST['content'];
 	$more=$_POST['more'];
-	$time=time();
-	$connect->connectClass->sendPost($title,$content,$more,$time);
+	$picturePost = $_POST['picturePost'];
+	if($picturePost == '')
+	{
+		$picturePost = 'images/1.png';
+	}
+	$connect->connectClass->sendPost($picturePost,$title,$content,$more);
 }
 ?>
 
@@ -52,6 +60,8 @@ if(isset($_POST['sendPost']))
 <title><?php echo TITLE; ?></title>
 <meta charset="UTF-8">
 <link rel="stylesheet" href="<?php echo STYLE; ?>">
+<script src="<?php echo JQUERY; ?>"></script>
+<script src="<?php echo SCRIPT; ?>"></script>
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.6.3/css/font-awesome.min.css">
 </head>
 <body>
@@ -62,15 +72,15 @@ if(isset($_POST['sendPost']))
 <div class="right-box">
 <?php 
 include("menus/menu.html");
-$connect->connectClass->editadmin("ارسال مطلب","/me/admin/panel/?post=form");
-$connect->connectClass->editadmin("ویرایش این قسمت","/me/admin/panel/?namepage=menus/menu.html");
-$connect->connectClass->editadmin($_SESSION['username'] . "، خروج از پنل","/me/admin/panel/?out=logout");
+$connect->connectClass->editadmin("ارسال مطلب", ADDRESS . "/admin/panel/?post=form");
+$connect->connectClass->editadmin("ویرایش این قسمت", ADDRESS . "/admin/panel/?namepage=menus/menu.html");
+$connect->connectClass->editadmin($_SESSION['username'] . "، خروج از پنل", ADDRESS . "/admin/panel/?out=logout");
  ?>
 </div>
 <br>
 <div class="right-box" style="color:black;text-align:left;">
 <?php include("menus/project.html"); 
-$connect->connectClass->editadmin("ویرایش این قسمت","/me/admin/panel/?namepage=menus/project.html");
+$connect->connectClass->editadmin("ویرایش این قسمت", ADDRESS . "/admin/panel/?namepage=menus/project.html");
 ?>
 </div>
 
@@ -86,13 +96,7 @@ $connect->connectClass->editadmin("ویرایش این قسمت","/me/admin/pane
 
 
 <?php
-if(isset($_GET['action']))
-{
-	$action=$_GET['action'];
-$connect->connectClass->actions($action);
-}
-?>
- <?php
+$connect->connectClass->getAction();
  if(isset($_GET['namepage']))
  {
 	 echo "<div style='text-align:left'>". $connect->connectClass->namePager ."</div><hr color='#f1f1f1'>";
@@ -110,8 +114,10 @@ $connect->connectClass->actions($action);
 	if($_GET['post'] == 'form')
 	{
 		?>
+		
 		<form action="" method="post">
-		<input type="text" name="title" id="title" placeholder="عنوان ...">
+		<input type="text" name="picturePost" id="picturePost" style="text-align:left;direction:ltr;" placeholder="Url picture... example : images/1.png">
+		<input type="text" name="title" id="title" style="border:0px;border-left:5px solid silver;" placeholder="عنوان ...">
 		<textarea name="content" id="content" placeholder="مطلب ..."></textarea>
 		<textarea name="more" id="more" placeholder="ادامه مطلب ..."></textarea>
 		<input type="submit" name="sendPost" id="sendPost" value="ارسال">
