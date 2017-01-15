@@ -1,11 +1,6 @@
-<!-- 
-
-Design by Amirh1749@gmail.com
-
--->
 <?php
-include_once("contoroller/cont.php");
-$connect=new contoroller();
+include_once("controller/cont.php");
+$connect=new controller();
 ($connect->checkAddress() == true) ?  : header("location:  "  .  ADDRESS .  NOT_FOUND . "");
 ?>
 <!Doctype html>
@@ -14,6 +9,8 @@ $connect=new contoroller();
 <title><?php echo TITLE; ?></title>
 <meta charset="UTF-8">
 <link rel="stylesheet" href="<?php echo STYLE; ?>">
+<script src="<?php echo JQUERY; ?>"></script>
+<script src="<?php echo SCRIPT; ?>"></script>
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.6.3/css/font-awesome.min.css">
 </head>
 <body class="background-body">
@@ -26,14 +23,7 @@ $connect=new contoroller();
 </div>
 
 <?php 
-if($connect->connectClass->checkadmin() == true)
-{
-	if(isset($_GET['action']))
-{
-$action=$_GET['action'];
-$connect->connectClass->actions($action);
-}
-}
+$connect->connectClass->getAction();
 include("menus/menu.html"); 
 $connect->connectClass->editadmin("پنل مدیریت","" .  ADDRESS  ."/admin/panel/");
 $connect->connectClass->editadmin("ویرایش این قسمت","" .  ADDRESS  ."/admin/panel/?namepage=menus/menu.html");
@@ -57,19 +47,8 @@ $connect->connectClass->editadmin("ویرایش این قسمت","" .  ADDRESS  
 
 <div class="left-box">
 <div class="title"><i class="fa fa-edit" style="font-size:38px;color:green" onclick="window.open('<?php echo ADDRESS; ?>/admin/login/','_self')"></i> <?php echo TITLE; ?></div>
-
-
-
 <?php 
-if(isset($_GET['post']))
-{
-	$idpost=$_GET['post'];
-	$connect->connectClass->showpost($idpost);
-}
-else
-{
-$connect->connectClass->showpost('');
-}
+$connect->connectClass->getShowPost();
 $connect->connectClass->manager('showButton');
  ?>
 </div>
