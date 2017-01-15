@@ -16,7 +16,7 @@ deny from all
   RewriteRule ^admin/panel/(\d+)*$ ./panel.php
   RewriteRule ^admin/login/(\d+)*$ ./nimda.php
   RewriteCond %{DOCUMENT_ROOT}%{REQUEST_URI} !-f
-  RewriteRule \.(gif|jpe?g|png|bmp) /images/not-found.png [NC,L]
+  RewriteRule \.(gif|jpe?g|png|bmp) /images/1.png [NC,L]
 
   ErrorDocument 404 /me/404.html
 
